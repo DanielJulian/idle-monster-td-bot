@@ -1,0 +1,9 @@
+opencv-contrib-python==4.5.1.48
+opencv-python==4.5.1.48
+numpy==1.20.1
+PyAutoGUI==0.9.52
+matplotlib==3.3.4
+PyQt5==5.15.4
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.8.1
+Pillow==8.1.2

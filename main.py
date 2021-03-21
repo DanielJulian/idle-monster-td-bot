@@ -43,7 +43,7 @@ def showImage(img, max_loc):
 def click(x, y):
     current_x, current_y = pyautogui.position()
     pyautogui.click(x, y)
-    pyautogui.moveTo(current_x, current_y) # We got back to where we were
+    pyautogui.moveTo(current_x, current_y) # We go back to where we were
 
 
 def searchTemplate(template, accuracy=0.87):
@@ -63,6 +63,7 @@ def searchTemplate(template, accuracy=0.87):
 
 def main():
     play_button = cv2.imread('./templates/PlayButton.jpg', 0)
+    cross_button = cv2.imread('./templates/CrossButton.jpg', 0)
     cargo_ready = cv2.imread('./templates/CargoReady.jpg', 0)
     dron_ready  = cv2.imread('./templates/DronReady.jpg', 0)
     chopper  = cv2.imread('./templates/chopper_template_noise.png', 0)
@@ -72,7 +73,7 @@ def main():
             # Chopper
             found = searchTemplate(chopper, accuracy=0.5)
             if (found):
-                searchTemplate(play_button)
+                searchTemplate(cross_button)
 
             # Dron
             found = searchTemplate(dron_ready)
