@@ -41,15 +41,17 @@ def showImage(img, max_loc):
     plt.show()
 
 def click(x, y):
-    # pyautogui.moveTo(x, y)
+    current_x, current_y = pyautogui.position()
     pyautogui.click(x, y)
+    pyautogui.moveTo(current_x, current_y) # We got back to where we were
 
 
-def searchTemplate(img, coords, template):
+def searchTemplate(template, accuracy=0.87):
+    time.sleep(0.1)
+    img, coords = get_monster_td_screenshot()
     max_val, max_loc = match_image(img, template)
 
-    # We will consider that the template was found if the confidence is bigger than 87%
-    if (max_val > 0.87):     
+    if (max_val > accuracy):     
         # Get the coordinates of the center of the image 
         x, y = get_xy_center(coords, max_loc, template)
         # Click it
@@ -63,26 +65,24 @@ def main():
     play_button = cv2.imread('./templates/PlayButton.jpg', 0)
     cargo_ready = cv2.imread('./templates/CargoReady.jpg', 0)
     dron_ready  = cv2.imread('./templates/DronReady.jpg', 0)
+    chopper  = cv2.imread('./templates/chopper_template_noise.png', 0)
 
     while(True):
         try:
-            img, coords = get_monster_td_screenshot()
+            # Chopper
+            found = searchTemplate(chopper, accuracy=0.5)
+            if (found):
+                searchTemplate(play_button)
 
             # Dron
-            found = searchTemplate(img, coords, dron_ready)
+            found = searchTemplate(dron_ready)
             if (found):
-                time.sleep(0.2)
-                img, coords = get_monster_td_screenshot()
-                searchTemplate(img, coords, play_button)
+                searchTemplate(play_button)
 
             # Cargo
-            img, coords = get_monster_td_screenshot()
-            time.sleep(0.1)
-            found = searchTemplate(img, coords, cargo_ready)
+            found = searchTemplate(cargo_ready)
             if (found):
-                time.sleep(0.2)
-                img, coords = get_monster_td_screenshot()
-                searchTemplate(img, coords, play_button)
+                searchTemplate(play_button)
                 
         except Exception as e:
             print(e) 
