@@ -1,6 +1,7 @@
 import win32gui
 import win32ui
 import win32con
+import win32com.client
 from ctypes import windll
 from PIL import Image
 import ctypes
@@ -12,6 +13,10 @@ def screen_monster_td():
     left, top, right, bot = win32gui.GetWindowRect(hwnd_target)
     w = right - left
     h = bot - top
+    
+    # Trick so setForeground always works
+    shell = win32com.client.Dispatch("WScript.Shell")
+    shell.SendKeys('%')
     win32gui.SetForegroundWindow(hwnd_target)
 
     hdesktop = win32gui.GetDesktopWindow()
