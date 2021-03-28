@@ -66,6 +66,9 @@ def main():
     cross_button = cv2.imread('./templates/CrossButton.jpg', 0)
     cargo_ready = cv2.imread('./templates/CargoReady.jpg', 0)
     dron_ready  = cv2.imread('./templates/DronReady.jpg', 0)
+    xp_ready  = cv2.imread('./templates/XPReady.jpg', 0)
+    gold_ready  = cv2.imread('./templates/GoldReady.jpg', 0)
+    essense_ready  = cv2.imread('./templates/EssenseReady.jpg', 0)
     chopper  = cv2.imread('./templates/chopper_template_noise.png', 0)
 
     while(True):
@@ -84,9 +87,17 @@ def main():
             found = searchTemplate(cargo_ready)
             if (found):
                 searchTemplate(play_button)
+            
+            # SKILLS
+            # XP
+            searchTemplate(xp_ready)
+            # Gold
+            searchTemplate(gold_ready)
+            # Essense
+            searchTemplate(essense_ready)
                 
         except Exception as e:
             print(e) 
-        time.sleep(15)
+        time.sleep(30)
 
 main()
