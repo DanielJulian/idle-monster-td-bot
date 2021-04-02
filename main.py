@@ -4,6 +4,7 @@ import time
 import screenshot 
 import pyautogui
 from matplotlib import pyplot as plt
+from my_stats import Statistics
 
 def get_xy_center(coords, max_loc, template):
     left, top, _, _ = coords
@@ -20,7 +21,6 @@ def match_image(img, template):
     # Apply template Matching
     res = cv2.matchTemplate(img, template, matching_method, mask=None)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-    print(max_val)
     return max_val, max_loc
 
 
@@ -56,9 +56,9 @@ def searchTemplate(template, accuracy=0.87):
         x, y = get_xy_center(coords, max_loc, template)
         # Click it
         click(x, y)
-        return True
+        return True, max_val
     else:
-        return False
+        return False, max_val
 
 
 def main():
@@ -69,35 +69,47 @@ def main():
     xp_ready  = cv2.imread('./templates/XPReady.jpg', 0)
     gold_ready  = cv2.imread('./templates/GoldReady.jpg', 0)
     essense_ready  = cv2.imread('./templates/EssenseReady.jpg', 0)
-    chopper  = cv2.imread('./templates/chopper_template_noise.png', 0)
+    chopper  = cv2.imread('./templates/chopper_template.jpg', 0)
+
+    accuracy_names = ['Chopper', 'Dron', 'Cargo', 'XP', 'Gold', 'Essense']
+    statistics = Statistics(accuracy_names)
 
     while(True):
+        accuracy_percents = []
         try:
             # Chopper
-            found = searchTemplate(chopper, accuracy=0.5)
+            found, max_val = searchTemplate(chopper, accuracy=0.5)
+            accuracy_percents.append(max_val)
             if (found):
                 searchTemplate(cross_button)
 
             # Dron
-            found = searchTemplate(dron_ready)
+            found, max_val = searchTemplate(dron_ready)
+            accuracy_percents.append(max_val)
             if (found):
                 searchTemplate(play_button)
 
             # Cargo
-            found = searchTemplate(cargo_ready)
+            found, max_val = searchTemplate(cargo_ready)
+            accuracy_percents.append(max_val)
             if (found):
                 searchTemplate(play_button)
             
             # SKILLS
             # XP
-            searchTemplate(xp_ready)
+            _, max_val = searchTemplate(xp_ready)
+            accuracy_percents.append(max_val)
             # Gold
-            searchTemplate(gold_ready)
+            _, max_val = searchTemplate(gold_ready)
+            accuracy_percents.append(max_val)
             # Essense
-            searchTemplate(essense_ready)
-                
+            _, max_val = searchTemplate(essense_ready)
+            accuracy_percents.append(max_val)
+
+            # Print accuracies
+            statistics.print(accuracy_percents)
         except Exception as e:
             print(e) 
-        time.sleep(30)
+        time.sleep(50)
 
 main()

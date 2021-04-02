@@ -13,6 +13,10 @@ def screen_monster_td():
     left, top, right, bot = win32gui.GetWindowRect(hwnd_target)
     w = right - left
     h = bot - top
+
+    if (w != 655 and h != 934): # We want to keep the window size always the same so it matches our templates
+        win32gui.MoveWindow(hwnd_target, left, top, 655, 934, True)
+        print("Resizing window: Height", h , " Width", w)
     
     # Trick so setForeground always works
     shell = win32com.client.Dispatch("WScript.Shell")
